@@ -1,0 +1,81 @@
+{
+    "branches": [
+        "master"
+    ],
+    "plugins": [
+        [
+            "@semantic-release/commit-analyzer",
+            {
+                "preset": "ESLint",
+                "releaseRules": [
+                    {
+                        tag: 'Breaking',
+                        release: 'major'
+                    },
+                    {
+                        tag: 'Update',
+                        release: 'minor'
+                    },
+                    {
+                        tag: 'New',
+                        release: 'minor'
+                    },
+                    {
+                        tag: 'Upgrade',
+                        release: 'minor'
+                    },
+                    {
+                        tag: 'Docs',
+                        release: 'patch'
+                    },
+                    {
+                        tag: 'Build',
+                        release: 'patch'
+                    },
+                    {
+                        tag: 'Chore',
+                        release: 'patch'
+                    },
+                    {
+                        tag: 'Fix',
+                        release: 'patch'
+                    },
+                ],
+            }
+        ],
+        [
+            "@semantic-release/release-notes-generator",
+            {
+                "preset": "ESLint"
+            }
+        ],
+        [
+            "@semantic-release/changelog",
+            {
+                "changelogFile": "CHANGELOG.md"
+            }
+        ],
+        [
+            "@semantic-release/exec",
+            {
+                "prepareCmd": "nx run-many --target=pre-release --all --args=\"--version=${nextRelease.version}\"",
+                "publishCmd": "nx run-many --target=release --all",
+            }
+        ],
+        "@semantic-release/github",
+        [
+            "@semantic-release/git",
+            {
+                "assets": [
+                    "CHANGELOG.md",
+                    "package-lock.json",
+                    "packages/cli/package.json",
+                    "packages/core/package.json",
+                    "packages/indicators/package.json",
+                    "packages/web/package.json",
+                ],
+                "message": "Chore: release ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+            }
+        ]
+    ]
+}
